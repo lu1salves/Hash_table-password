@@ -131,6 +131,14 @@ class Tabela_Hash {
         }
 };
 
+
+//fazer a implementação de ler as senhas do arquivo senhas.txt e inserir todas as senhas que estão naquele arquivo
+//em ordem de aparição
+//exemplo:
+//1 linha senha x
+//2 linha senha y
+//onde cada linha já é a própria chave e a senha é o dado a ser armazenado
+
 int main() {
     Tabela_Hash tabela(10); // Tamanho da tabela: 100000
 
