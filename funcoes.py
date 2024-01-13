@@ -1,17 +1,7 @@
-def Make-Table()
+###Script em python para testar a eficiência da minha tabela hash
 
-def Show-Table()
+##testando a sondagem
 
-def Destroy-Table()
+##testando o balanceamento de carga
 
-def Size-Table()
 
-def Insert-Table()
-
-def search-Table()
-
-def search-Table2() 
-
-def remove-Table()
-
-def remove-Table2()
