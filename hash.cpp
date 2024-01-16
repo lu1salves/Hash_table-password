@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include <cstdlib> 
+#include <fstream>
 
 using namespace std;
 
@@ -86,7 +87,7 @@ A classe `Tabela_Hash` implementa uma tabela hash que permite armazenar e gerenc
  * @param dado : informação guardada pelo item na tabela hash
  */
 struct Item{
-    int chave;
+    double chave;
     string dado;
 };
 
@@ -103,7 +104,7 @@ class Tabela_Hash{
 
         // Função de hash simples
         int hash(int chave){
-            return static_cast<int>(chave % tamanho_tabela);
+            return static_cast<int>(fmod(chave, tamanho_tabela));
         }
 
     public:
@@ -226,6 +227,10 @@ class Tabela_Hash{
             }
         }
 
+        int getColisoes() const {
+            return colisoes;
+        }
+
         /**
          * @brief Função para mostrar informações sobre o desempenho da tabela hash
          */
@@ -271,7 +276,7 @@ void showMenu(){
     
     cout << "1. Funções da tabela hash" << endl; //criar tabela hash para poder colocar um N pre-setado
 
-    cout << "2. Informacoes de desempenho (para desenvolvedores malucos)" << endl; // Nova opção
+    cout << "2. Informacoes de desempenho" << endl; // Nova opção
     
     cout<< "3 .help (documentação)" <<endl;
     
@@ -297,12 +302,22 @@ void clearScreen(){
 }
 
 int main(){
+    cout << "\033[1;34m";
+    cout<<"Antes de comçarmos o programa, digite o tamanho da tabela hash que você deseja"<<endl;
+    long long n;
+    cin>>n;
+    Tabela_Hash tabela(n); // Tamanho da tabela: 10
 
-    Tabela_Hash tabela(10); // Tamanho da tabela: 10
 
     int opcao;
     double chave;
     string dado;
+    string nomeArquivo = "senhas.txt"; 
+    ifstream arquivo(nomeArquivo);
+
+    /*
+    A opção de ler as senhas por meio do arquivo txt é uma ótima opção para testar as colisões da tabela hash
+    */
 
     do{
         std::cout << "\033[1;34m";
@@ -313,6 +328,7 @@ int main(){
         switch (opcao){
 
             case 1:
+                cout << "\033[1;34m";
                 cout << "A tabela hash tem as seguintes operações: " << endl;
                 cout << "1. Inserir elemento" << endl;
                 cout << "2. Buscar elemento por chave" << endl;
@@ -320,43 +336,50 @@ int main(){
                 cout << "4. Remover elemento por chave" << endl;
                 cout << "5. Remover elementos por dado" << endl;
                 cout << "6. Mostrar tabela" << endl;
-                cout << "7. voltar para a tela anterior" << endl;
+                cout << "7. Ler arquivo txt" << endl;
+                cout << "8. voltar para a tela anterior" << endl;
                 
                 int escolha;
                 cout<<"Digite a operação que você gostaria de realizar: ";
                 cin>>escolha;
-
+                cin.ignore();
                 switch (escolha){
 
                     case 1:
                         cout << "Digite a chave: ";
                         cin >> chave;
+                        cin.ignore();
                         cout << "Digite o dado: ";
                         cin >> dado;
+                        cin.ignore();
                         tabela.inserir_tabela(chave, dado);
                         break;
 
                     case 2:
                         cout << "Digite a chave: ";
                         cin >> chave;
+                        cin.ignore();
                         tabela.busca_chave(chave);
                         break;
 
                     case 3:
                         cout << "Digite o dado: ";
                         cin >> dado;
+                        cin.ignore();
                         tabela.busca_dado(dado);
                         break;
 
                     case 4:
                         cout << "Digite a chave: ";
                         cin >> chave;
+                        cin.ignore();
                         tabela.remove_chave(chave);
                         break;
 
                     case 5:
                         cout << "Digite o dado: ";
                         cin >> dado;
+                        cin.ignore();
                         tabela.remove_dado(dado);
                         break;
 
@@ -364,13 +387,33 @@ int main(){
                         tabela.print_tabela();
                         break;
 
+                    //lembre de executar o script de python antes, para ter senhas o suficiente no arquivo txt
                     case 7:
+                           if (arquivo.is_open()) {
+                                string linha;
+                                int chave = 1; // Inicializa a chave da primeira senha como 1
+                                while (getline(arquivo, linha)) {
+                                    // Insira a senha na tabela hash com a chave correspondente
+                                    tabela.inserir_tabela(static_cast<double>(chave), linha);
+                                    chave++; // Incremente a chave para a próxima senha
+                                }
+                                arquivo.close();
+                            } else {
+                                cout << "Erro ao abrir o arquivo: " << nomeArquivo << endl;
+                                return 1; // Saia do programa com código de erro
+                            }
+                        break;
+
+                    case 8:
+                        break;
 
                     default:
                         cout << "Opção inválida. Tente novamente." << endl;
                         break;
 
                 }
+                cout << "\033[0m";
+                break;
 
             case 2:
                 tabela.mostrar_desempenho();
@@ -378,7 +421,7 @@ int main(){
             
             case 3:
                 
-                std::cout << s << std::endl;
+                cout << s << std::endl;
 
             case 4:
                 cout << "Saindo..." << endl;
@@ -398,7 +441,11 @@ int main(){
             cin.get();
         }
 
+        cout << "\033[0m";
+
     } while (opcao != 4);
+
+    cout << "\033[0m";
 
     return 0;
 }

@@ -11,8 +11,8 @@ def generate_password(length):
 
 #altere esse número para a quantidade necessária de senhas que você preferir
 num_passwords = 100
-min_length = 8 #tamanho mínimo de senhas
-max_length = 16 #tamanho máximo de senhas
+min_length = 3 #tamanho mínimo de senhas
+max_length = 8 #tamanho máximo de senhas
 
 with open('senhas.txt', 'w') as file:
     for _ in range(num_passwords):
